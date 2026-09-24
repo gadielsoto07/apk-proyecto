@@ -31,8 +31,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential libssl-dev libffi-dev python3-dev \
             git zip unzip openjdk-17-jdk ccache libltdl-dev libxml2-dev libxslt1-dev
-          pip install --upgrade pip setuptools wheel
-          pip install "Cython<3.0.0" buildozer
+          pip install --quiet --upgrade pip setuptools wheel
+          pip install --quiet "Cython<3.0.0" buildozer
 
       - name: Compilar APK con Buildozer
         run: |
