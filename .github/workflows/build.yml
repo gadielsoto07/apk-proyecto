@@ -35,8 +35,32 @@ jobs:
           pip install --quiet "Cython<3.0.0" buildozer
 
       - name: Compilar APK con Buildozer
-        run: |
-          yes | buildozer android debug
+  shell: bash
+  run: |
+    set -o pipefail
+    yes | buildozer android debug 2>&1 | tee buildozer.log
+
+- name: Mostrar últimas líneas del log
+  if: failure()
+  run: |
+    echo "Últimas 200 líneas de Buildozer:"
+    tail -n 200 buildozer.log
+
+- name: Subir log completo de Buildozer
+  if: always()
+  uses: actions/upload-artifact@v4
+  with:
+    name: buildozer-log
+    path: buildozer.log
+    if-no-files-found: warn
+
+- name: Subir APK generado a Artifacts
+  if: success()
+  uses: actions/upload-artifact@v4
+  with:
+    name: MiApp-Android-APK
+    path: bin/*.apk
+    if-no-files-found: error
 
       - name: Subir APK generado a Artifacts
         uses: actions/upload-artifact@v4
